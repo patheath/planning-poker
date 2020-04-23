@@ -3,17 +3,17 @@
   "name": "Planning Poker App",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "favicon-96x96.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "PlanningPoker192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "PlanningPoker.png",
+      "src": "PlanningPokerLarge.png",
       "type": "image/png",
       "sizes": "512x512"
     }
