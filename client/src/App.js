@@ -43,6 +43,7 @@ function App() {
       });
       axios.interceptors.response.use(null, error => {
           setGlobalError(error.message);
+          console.log('Error message: ' + error.message);
       });
       setIsInterceptorSet('true'); // Set these up once
   }
@@ -63,7 +64,7 @@ function App() {
         <Route path="/about">
           <h1>About- Placeholder</h1>
         </Route>
-        <Route path="/session">
+        <Route path="/session/:id/:email">
           <Session />
         </Route>
         <Route path="/">
