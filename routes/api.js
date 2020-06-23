@@ -2,9 +2,11 @@ var express = require("express");
 var router = express.Router();
 var start = require("../handlers/start.js");
 var putItem = require("../handlers/foo.js");
+var getSessionsByEmail = require("../handlers/sessions.js");
 
 var myLogger = function (req, res, next) {
   console.log(Date(Date.now()).toString());
+  console.log("Payload:");
   console.log(req.body);
   next();
 };
@@ -31,6 +33,20 @@ router.post("/session/:sessionId", function (req, res, next) {
     id,
     errors: [],
   });
+});
+
+router.get("/sessions/:email", async (req, res, next) => {
+  const { email } = req.params;
+  let error = null;
+
+  // Call our service
+  const sessions = await getSessionsByEmail(email);
+
+  if (error) {
+    res.status(500).json({ error: error });
+  } else {
+    res.json({ sessions: sessions });
+  }
 });
 
 module.exports = router;

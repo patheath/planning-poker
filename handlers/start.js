@@ -14,7 +14,7 @@ function start(emails) {
   //const sessionId = ""; // for testing
   const errors = [];
 
-  var table = "Sessions";
+  var table = "PlanningPoker.Sessions";
 
   emails.forEach((email) => {
     var params = {

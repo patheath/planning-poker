@@ -11,7 +11,7 @@ AWS.config.update({
 var dynamodb = new AWS.DynamoDB();
 
 var params = {
-  TableName: "Sessions",
+  TableName: "PlanningPoker.Sessions",
   KeySchema: [
     { AttributeName: "id", KeyType: "HASH" }, //Partition key
     { AttributeName: "email", KeyType: "RANGE" }, //Sort key
@@ -24,6 +24,22 @@ var params = {
     ReadCapacityUnits: 10,
     WriteCapacityUnits: 10,
   },
+  GlobalSecondaryIndexes: [
+    {
+      IndexName: "email-index",
+      KeySchema: [
+        { AttributeName: "email", KeyType: "HASH" },
+        { AttributeName: "id", KeyType: "RANGE" },
+      ],
+      Projection: {
+        ProjectionType: "ALL",
+      },
+      ProvisionedThroughput: {
+        ReadCapacityUnits: 10,
+        WriteCapacityUnits: 10,
+      },
+    },
+  ],
 };
 
 dynamodb.createTable(params, function (err, data) {

@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
+import { useDataApi } from "../hooks/useDataApi";
 import "./Welcome.css";
 
 function Welcome() {
@@ -16,6 +17,13 @@ function Welcome() {
   const [emailError, setEmailError] = useState(null);
   const [emailInvalid, setEmailInvalid] = useState(false);
   const [timer, setTimer] = useState(60);
+  const [user, setUser] = useState("patheath@gmail.com");
+  const [{ data, isLoading, isError }, doFetch] = useDataApi(
+    "http://localhost:9000/",
+    {
+      hits: [],
+    }
+  );
 
   const addParticipant = (event) => {
     event.preventDefault();
