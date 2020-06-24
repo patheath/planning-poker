@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "develop": "DEBUG=planning-poker:* npm start"
   },
   "dependencies": {
     "acorn": ">=5.7.4",
