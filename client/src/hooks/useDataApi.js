@@ -1,6 +1,8 @@
 import { useState, useEffect, useReducer } from "react";
 import axios from "axios";
 
+const API_URL = "http://localhost:3000/api";
+
 const dataFetchReducer = (state, action) => {
   switch (action.type) {
     case "FETCH_INIT":
@@ -43,7 +45,8 @@ const useDataApi = (initialUrl, initialData) => {
       dispatch({ type: "FETCH_INIT" });
 
       try {
-        const result = await axios(url);
+        console.log("Fetch data from: " + API_URL + url);
+        const result = await axios(API_URL + url);
 
         if (!didCancel) {
           dispatch({ type: "FETCH_SUCCESS", payload: result.data });
@@ -64,3 +67,5 @@ const useDataApi = (initialUrl, initialData) => {
 
   return [state, setUrl];
 };
+
+export default useDataApi;

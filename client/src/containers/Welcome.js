@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
@@ -8,7 +9,8 @@ import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
-import { useDataApi } from "../hooks/useDataApi";
+import ListGroup from "react-bootstrap/ListGroup";
+import useDataApi from "../hooks/useDataApi";
 import "./Welcome.css";
 
 function Welcome() {
@@ -17,12 +19,10 @@ function Welcome() {
   const [emailError, setEmailError] = useState(null);
   const [emailInvalid, setEmailInvalid] = useState(false);
   const [timer, setTimer] = useState(60);
-  const [user, setUser] = useState("patheath@gmail.com");
+  const [user, setUser] = useState("heath@gmail.com");
   const [{ data, isLoading, isError }, doFetch] = useDataApi(
-    "http://localhost:9000/",
-    {
-      hits: [],
-    }
+    `/sessions/${user}`,
+    []
   );
 
   const addParticipant = (event) => {
@@ -89,6 +89,22 @@ function Welcome() {
     });
   };
 
+  const displayActiveSessions = (activeSessions) => {
+    return (
+      <ListGroup>
+        {activeSessions.map((session) => {
+          return (
+            <ListGroup.Item key={session.id}>
+              <Link to={`/session/${session.id}/${session.email}`}>
+                {session.id}
+              </Link>
+            </ListGroup.Item>
+          );
+        })}
+      </ListGroup>
+    );
+  };
+
   return (
     <>
       <Jumbotron>
@@ -123,6 +139,9 @@ function Welcome() {
                 <InputGroup.Text>in seconds</InputGroup.Text>
               </InputGroup.Append>
             </InputGroup>
+            Active Sessions:
+            <p />
+            {isLoading ? null : displayActiveSessions(data)}
           </Col>
           <Col xs={2}></Col>
           <Col xs={5}>
