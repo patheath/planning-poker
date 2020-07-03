@@ -7,6 +7,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Welcome from "./containers/Welcome";
 import Session from "./containers/Session";
+import Alert from "react-bootstrap/Alert";
 
 function App() {
   function displayNavLink(name, to) {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useReducer } from "react";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = "http://localhost:3000/api/";
 
 const dataFetchReducer = (state, action) => {
   switch (action.type) {
@@ -23,6 +23,13 @@ const dataFetchReducer = (state, action) => {
         ...state,
         isLoading: false,
         isError: true,
+      };
+    case "FETCH_IGNORE":
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        data: [],
       };
     default:
       throw new Error();
@@ -58,7 +65,12 @@ const useDataApi = (initialUrl, initialData) => {
       }
     };
 
-    fetchData();
+    if (!url) {
+      // No endpoint given, don't fetch data return empty
+      dispatch({ type: "FETCH_IGNORE" });
+    } else {
+      fetchData();
+    }
 
     return () => {
       didCancel = true;

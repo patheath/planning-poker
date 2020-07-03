@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { Link } from "react-router-dom";
+import Alert, { AlertHeading } from "react-bootstrap/Alert";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
@@ -19,11 +20,9 @@ function Welcome() {
   const [emailError, setEmailError] = useState(null);
   const [emailInvalid, setEmailInvalid] = useState(false);
   const [timer, setTimer] = useState(60);
-  const [user, setUser] = useState("heath@gmail.com");
-  const [{ data, isLoading, isError }, doFetch] = useDataApi(
-    `/sessions/${user}`,
-    []
-  );
+  const [user, setUser] = useState("");
+  const [isCurrentUserSet, setIsCurrentUserSet] = useState(false);
+  const [{ data, isLoading, isError }, doFetch] = useDataApi(null, []);
 
   const addParticipant = (event) => {
     event.preventDefault();
@@ -89,6 +88,49 @@ function Welcome() {
     });
   };
 
+  const addCurrentUser = () => {
+    return (
+      <Form onSubmit={submitCurrentUser}>
+        <Form.Group controlId="formUsersEmail">
+          <InputGroup>
+            <InputGroup.Prepend>
+              <Button variant="outline-primary" type="submit">
+                Add
+              </Button>
+            </InputGroup.Prepend>
+            <FormControl
+              required
+              type="email"
+              name="user"
+              value={user}
+              placeholder="Current user's email"
+              onChange={(event) => {
+                setUser(event.target.value);
+              }}
+            />
+          </InputGroup>
+        </Form.Group>
+      </Form>
+    );
+  };
+
+  const displayCurrentUser = () => {
+    return (
+      <Alert variant="success">
+        <Alert.Heading as="span" bsPrefix="alert-heading h5">
+          Current User:{" "}
+        </Alert.Heading>
+        {user}
+      </Alert>
+    );
+  };
+
+  const submitCurrentUser = (event) => {
+    event.preventDefault();
+    setIsCurrentUserSet(true);
+    doFetch(`/sessions/${user}`);
+  };
+
   const displayActiveSessions = (activeSessions) => {
     return (
       <ListGroup>
@@ -145,6 +187,8 @@ function Welcome() {
           </Col>
           <Col xs={2}></Col>
           <Col xs={5}>
+            {isCurrentUserSet ? displayCurrentUser() : addCurrentUser()}
+            <p />
             Participants:
             <p />
             <Form onSubmit={addParticipant}>
