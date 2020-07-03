@@ -12,9 +12,11 @@ import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
 import ListGroup from "react-bootstrap/ListGroup";
 import useDataApi from "../hooks/useDataApi";
+import ErrorContainer from "../components/error/ErrorContainer";
 import "./Welcome.css";
 
 function Welcome() {
+  const [errorMessage, setErrorMessage] = useState(null);
   const [participants, setParticipants] = useState([]);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(null);
@@ -46,6 +48,29 @@ function Welcome() {
   const handleEmailChange = (event) => {
     setEmailInvalid(false);
     setEmail(event.target.value);
+  };
+
+  const handleStart = () => {
+    /*
+     * Check that we have a current user logged in
+     * Check that we have atleast one participant
+     * If these pass we can start the session.
+     * Add current user to the participant list
+     * if not already on it.   Then start the session
+     * and redirect to the session returned
+     */
+    if (!isCurrentUserSet) {
+      setErrorMessage("First add your email address.");
+      return;
+    } else if (participants.length < 1) {
+      setErrorMessage("Add at least one participant.");
+      return;
+    }
+
+    let cloneParticipants = [...participants];
+    if (!cloneParticipants.includes(user)) {
+      cloneParticipants.push(user);
+    }
   };
 
   const handleTimerChange = (event) => {
@@ -161,10 +186,11 @@ function Welcome() {
           </Row>
         </Container>
       </Jumbotron>
+      {errorMessage && <ErrorContainer errorMessage={errorMessage} />}
       <Container>
         <Row>
           <Col xs={5}>
-            <Button variant="primary" size="lg" block>
+            <Button variant="primary" size="lg" block onClick={handleStart}>
               START!
             </Button>
             <p />
